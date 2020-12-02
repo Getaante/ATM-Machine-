@@ -1,0 +1,52 @@
+@startuml
+class User{
+  -current_balance:double
+  -First_name:string
+  -Last_name:string
+  -Card_Number:int
+  -Expiration_Date:int
+  -PIN_Number:int
+  -Account_Number:int
+  Make_Deposit(double: amount)
+  Make_Withdrawal(double: amount)
+  Check_Balance()
+}
+class Validator{
+  Valid_Card_Numbers(bool: Card_Number)
+  Set_UI_Option()
+  Request_PIN()
+  Set_PIN(int: PIN_Number)
+  Get_PIN_Number()
+  Failed_Validation()
+  Validate_PIN()
+  }
+class UI {
+  Lock_Server()
+  Make_Deposit()
+  Deposit_Completed()
+  Make_Withdrawal()
+  Failed_Withdrawal()
+  Check_Balance()
+  Current_Balance()
+  }
+class Bank_server {
+  Lock_Status:bool
+ Invalid_PIN()
+  Set_Amount()
+  Locked()
+  Unlocked()
+  Withdraw_Amount()
+  Get_Amount()
+}
+class Bank_Account {
+  -current_amount:double
+Completed_Deposit()
+  Withdraw_Amount()
+  Check_Balance()
+}
+User o-- Validator
+UI o-- Bank_server
+UI o-- User
+Bank_server o-- Validator
+Bank_Account o-- Bank_server
+@enduml
