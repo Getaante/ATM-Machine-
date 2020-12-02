@@ -1,0 +1,120 @@
+@startuml
+User -> Validator: Validate_Card()
+activate User
+alt Validate_Card()
+  activate Validator
+  else Validated_Card
+    Validator --> User: Request_PIN()
+  else Validate_PIN
+  User -> Validator: Set_PIN()
+  Validator -> Bank_Server:Validate_PIN()
+  activate Bank_Server
+  alt Valid_PIN
+  Bank_Server --> Validator: True
+  Validator --> User:Set_UI_Option()
+ alt Make_Deposit()
+  User -> UI: Make_Deposit()
+activate UI
+  UI-> Bank_Server:Lock_Server()
+  activate Bank_Server
+  Bank_Server-->UI:Locked()
+  UI->Bank_Server:Make_Deposit()
+  Bank_Server->Bank_Account:Set_Amount()
+  activate Bank_Account
+  Bank_Account-->Bank_Server:Completed_Deposit()
+  deactivate Bank_Account
+  Bank_Server--> UI: Unlocked()
+  deactivate Bank_Server
+  UI-->User:Deposit_Completed()
+  deactivate UI
+end
+end
+else Invalid_PIN
+  Bank_Server-->Validator:Invalid_PIN()
+deactivate Bank_Server
+  else Failure of Validate_Card()
+  Validator --> User: Falied_Validation()
+  deactivate Validator
+  deactivate User
+end
+User -> Validator: Validate_Card()
+activate User
+alt Validate_Card()
+  activate Validator
+  else Validated_Card
+    Validator --> User: Request_PIN()
+  else Validate_PIN
+  User -> Validator: Set_PIN()
+  Validator -> Bank_Server:Validate_PIN()
+  activate Bank_Server
+  alt Valid_PIN
+  Bank_Server --> Validator: True
+  Validator --> User:Set_UI_Option()
+ alt Make_Withdrawal()
+  User -> UI: Make_Withdrawal()
+activate UI
+  UI-> Bank_Server:Lock_Server()
+  activate Bank_Server
+  Bank_Server-->UI:Locked()
+  UI->Bank_Server:Make_Withdrawal()
+  Bank_Server->Bank_Account:Withdraw_Amount()
+  activate Bank_Account
+alt Succeessful withdrawal
+  Bank_Account-->Bank_Server:Completed_Withdrawal()
+  Bank_Account-->Bank_Server:Failed_Withdrawal()
+  deactivate Bank_Account
+  Bank_Server--> UI: Unlocked()
+  deactivate Bank_Server
+  UI-->User:Withdrawal_Completed()
+else Failure of withdrawal
+ UI-> User:Failed_Withdrawal()
+end
+  deactivate UI
+end
+end
+  else Invalid_PIN
+  Bank_Server-->Validator:Invalid_PIN()
+deactivate Bank_Server
+  else Failure of Validate_Card()
+  Validator --> User: Falied_Validation()
+  deactivate Validator
+  deactivate User
+end
+User -> Validator: Validate_Card()
+activate User
+alt Validate_Card()
+  activate Validator
+  else Validated_Card
+    Validator --> User: Request_PIN()
+  else Validate_PIN
+  User -> Validator: Set_PIN()
+  Validator -> Bank_Server:Validate_PIN()
+  activate Bank_Server
+  alt Valid_PIN
+  Bank_Server --> Validator: True
+  Validator --> User:Set_UI_Option()
+ alt Check_Balance()
+  User -> UI: Check_Balance()
+activate UI
+  UI-> Bank_Server:Lock_Server()
+  activate Bank_Server
+  Bank_Server-->UI:Locked()
+  UI->Bank_Server:Check_Balance()
+  Bank_Server->Bank_Account:Get_Amount()
+  activate Bank_Account
+  Bank_Account-->Bank_Server:Check_Balance()
+  deactivate Bank_Account
+  Bank_Server--> UI: Unlocked()
+  deactivate Bank_Server
+  UI-->User:Current_Balance()
+  deactivate UI
+end
+end
+  else Invalid_PIN
+  Bank_Server-->Validator:Invalid_PIN()
+deactivate Bank_Server
+  else Failure of Validate_Card()
+  Validator --> User: Falied_Validation()
+  deactivate Validator
+  deactivate User
+@enduml
